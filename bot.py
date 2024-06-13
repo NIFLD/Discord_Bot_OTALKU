@@ -37,26 +37,32 @@ async def rename_channel(ctx, channel_name : str, new_name: str):
         await ctx.send(f"Failed to rename channel: {e}")
 
 
-@tasks.loop(hours=12)  # 每隔一小时执行一次
+@tasks.loop(seconds=5)  
 async def change_channel_name():
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    new_channel_name = f"Channel Name - {current_time}"  # 可以根据需要定义新的频道名称
+    new_channel_name = f"Channel Name - {current_time}"  #
 
-    guild_id = 123456789012345678  # 伺服器 ID
-    channel_id = 123456789012345678  # 頻道 ID
-    guild = bot.get_guild(guild_id)
-    channel = guild.get_channel(channel_id)
+    guild_name = "NI"
+    channel_name = "nini - {current_time}"
+    guild = discord.utils.get(bot.guilds, name=guild_name)
+    # channel = guild.get_channel(channel_name)
 
-    if channel:
-        try:
-            await channel.edit(name=new_channel_name)
-            print(f"Successfully changed channel name to '{new_channel_name}'")
-        except discord.Forbidden:
-            print("I don't have permission to rename that channel.")
-        except discord.HTTPException as e:
-            print(f"Failed to rename channel: {e}")
-    else:
-        print(f"Channel with ID {channel_id} not found.")
+    if guild is None:
+        print(f"Guild with name '{guild_name}' not found.")
+        return
+
+    channel = discord.utils.get(guild.text_channels, name=channel_name)
+    if channel is None:
+        print(f"Channel with name '{channel_name}' not found in guild '{guild_name}'.")
+        return
+
+    try:
+        await channel.edit(name=new_channel_name)
+        print(f"Successfully changed channel name to '{new_channel_name}'")
+    except discord.Forbidden:
+        print("I don't have permission to rename that channel.")
+    except discord.HTTPException as e:
+        print(f"Failed to rename channel: {e}")
 
 # 启动定时任务
 @bot.event
