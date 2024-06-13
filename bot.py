@@ -64,4 +64,5 @@ async def on_ready():
     print('Bot is ready!')
     change_channel_name.start()  # 启动定时任务
 
-bot.run('MTI1MDQxNTU2OTM1NDYyMDk3OA.Gv_kUP.k7NaZqyTXwYIb-8SrN57xOuBldanWe9TpcaIDY')
+# bot.run('MTI1MDQxNTU2OTM1NDYyMDk3OA.Gv_kUP.k7NaZqyTXwYIb-8SrN57xOuBldanWe9TpcaIDY')
+bot.run(os.getenv("BOT_TOKEN"))
